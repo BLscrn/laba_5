@@ -35,7 +35,8 @@ int rasp(int ch,int x,int y,int name0 ,int name1,int name2,Graf** graf) {
 		return 6;
 	}
 	if (ch == 7) {
-		//return 7;
+		random(graf, name1);
+		return 7;
 	}
 	if (ch == 8) {
 		//D_Timing();
@@ -44,21 +45,23 @@ int rasp(int ch,int x,int y,int name0 ,int name1,int name2,Graf** graf) {
 
 
 void add_ver(Graf** graf, int x, int y,int name0) {
-	if ((*graf)->graf_mas == NULL) {
-		(*graf)->graf_mas = (Vertex*)calloc(1, sizeof(Vertex));
-		(*graf)->graf_mas->name = name0;
-		(*graf)->graf_mas->x = x;
-		(*graf)->graf_mas->y = y;
-		((*graf)->col_vertex)++;
-	}
-	else if ((*graf)->graf_mas != NULL) {
-	(*graf)->graf_mas = (Vertex*)realloc(((*graf)->graf_mas), ((*graf)->col_vertex + 1) * sizeof(Vertex));
-	(*graf)->graf_mas[(*graf)->col_vertex].name = name0;
-	(*graf)->graf_mas[(*graf)->col_vertex].x = x;
-	(*graf)->graf_mas[(*graf)->col_vertex].y = y;
-	(*graf)->graf_mas[(*graf)->col_vertex].edge = NULL;
-	((*graf)->col_vertex)++;
+	if (find_ver(*graf, name0) == NULL) {
+		if ((*graf)->graf_mas == NULL) {
+			(*graf)->graf_mas = (Vertex*)calloc(1, sizeof(Vertex));
+			(*graf)->graf_mas->name = name0;
+			(*graf)->graf_mas->x = x;
+			(*graf)->graf_mas->y = y;
+			((*graf)->col_vertex)++;
+		}
+		else if ((*graf)->graf_mas != NULL) {
+			(*graf)->graf_mas = (Vertex*)realloc(((*graf)->graf_mas), ((*graf)->col_vertex + 1) * sizeof(Vertex));
+			(*graf)->graf_mas[(*graf)->col_vertex].name = name0;
+			(*graf)->graf_mas[(*graf)->col_vertex].x = x;
+			(*graf)->graf_mas[(*graf)->col_vertex].y = y;
+			(*graf)->graf_mas[(*graf)->col_vertex].edge = NULL;
+			((*graf)->col_vertex)++;
 
+		}
 	}
 }
 
@@ -190,30 +193,6 @@ void del_ver(Graf** graf, int name1) {
 			else {
 				change_uk(&((*graf)->graf_mas[(*graf)->col_vertex - 1]), help_del, &((*graf)->graf_mas[i]).edge);
 			}
-			/*
-			old_mas = (*graf)->graf_mas;
-			new_mas = (Vertex*)calloc((*graf)->col_vertex - 1, sizeof(Vertex));
-			int j = 0;
-			for (int i = 0; i < (*graf)->col_vertex - 1; i++) {
-				if (&((*graf)->graf_mas[i]) != help_del) {
-					new_mas[i].edge = old_mas[j].edge;
-					new_mas[i].name = old_mas[j].name;
-					new_mas[i].x = old_mas[j].x;
-					new_mas[i].y = old_mas[j].y;
-				}
-				else {
-					j += 1;
-					new_mas[i].edge = old_mas[j].edge;
-					new_mas[i].name = old_mas[j].name;
-					new_mas[i].x = old_mas[j].x;
-					new_mas[i].y = old_mas[j].y;
-				}
-				j++;
-			}
-
-			free(old_mas);
-			(*graf)->graf_mas = new_mas;
-			*/
 		}
 		(*graf)->graf_mas = (Vertex*)realloc((*graf)->graf_mas, ((*graf)->col_vertex - 1) * sizeof(Vertex));
 		((*graf)->col_vertex)--;
@@ -238,5 +217,72 @@ void free_graf(Graf* graf) {
 	}
 	free(graf->graf_mas);
 	free(graf);
+}
+
+int load(Graf** graf, char* name) {
+	FILE* f = NULL;
+	int x, y, name0;
+	int kol;
+	f = fopen(name, "r+b");
+	if (f == NULL) {
+		return 1;
+	}
+	fread(&kol, sizeof(int), 1, f);
+	for (int i = 0; i < kol; i++) {
+		fread(&x, sizeof(int), 1, f);
+		fread(&y, sizeof(int), 1, f);
+		fread(&name0, sizeof(int), 1, f);
+		add_ver(graf, x, y, name0);
+	}
+	fread(&kol, sizeof(int), 1, f);
+	for (int i = 0; i < kol; i++) {
+		fread(&x, sizeof(int), 1, f);
+		fread(&y, sizeof(int), 1, f);
+		add_edge(graf, x, y);
+	}
+	fclose(f);
+	return 0;
+}
+
+void save(Graf* graf,char* name) {
+	FILE* f;
+
+	f = fopen(name, "w+b");
+	fwrite(&(graf->col_vertex), sizeof(int), 1, f);
+	for (int i = 0; i < graf->col_vertex; i++) {
+		fwrite(&(graf->graf_mas[i].x), sizeof(int), 1, f);
+		fwrite(&(graf->graf_mas[i].y), sizeof(int), 1, f);
+		fwrite(&(graf->graf_mas[i].name), sizeof(int), 1, f);
+	}
+	fwrite(&(graf->col_edge), sizeof(int), 1, f);
+	Edge* help;
+	for (int i = 0; i < graf->col_vertex; i++) {
+		help = graf->graf_mas[i].edge;
+		while (help != NULL) {
+			fwrite(&(help->from_el->name), sizeof(int), 1, f);
+			fwrite(&(help->to_el->name), sizeof(int), 1, f);
+			help = help->next_edge;
+		}
+	}
+	free(name);
+	fclose(f);
+}
+
+void random(Graf** graf, int kol) {
+	int rand_x;
+	int rand_y;
+	int rand_nm;
+	for (int i = 0; i < kol; i++) {
+		rand_x = rand() % 100;
+		rand_y = rand() % 100;
+		rand_nm = rand() % 100;
+		add_ver(graf, rand_x, rand_y, rand_nm);
+	}
+	rand_nm = rand() % (kol*kol);
+	for (int i = 0; i < rand_nm; i++) {
+		rand_x = rand() % 100;
+		rand_y = rand() % 100;
+		add_edge(graf, rand_x, rand_y);
+	}
 }
 

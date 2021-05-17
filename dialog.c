@@ -40,7 +40,7 @@ int getInt(int* a) {
 int dialog(int* x, int* y,int* name1, int* name2,int* name0) {
 	int flag, ch;
 	char* chouse[] = { "1. Enter new vertex", "2. Enter new edge"
-		,"3. dellete vertex","4. dellete edge","5. show graf","6. Exite","7. ite","8. Timing" };
+		,"3. dellete vertex","4. dellete edge","5. show graf","6. Exite","7. random generation","8. Timing" };
 	printf("Choose one of this variants:\n");
 	for (int i = 0; i < 8; i++) {
 		printf("%s\n", chouse[i]);
@@ -97,6 +97,9 @@ int dialog(int* x, int* y,int* name1, int* name2,int* name0) {
 		return 6;
 	}
 	if (ch == 7) {
+		printf("number of elements");
+		scanf("%d", name1);
+		while (getchar() != '\n');
 		return 7;
 	}if (ch == 8) {
 		return 8;
@@ -117,4 +120,16 @@ void show_graf(Graf* graf) {
 			help = help->next_edge;
 		}
 	}
+}
+
+
+char* enter_file(Graf** graf) {
+	char* name;
+	char qwer;
+	int re = 1;
+	printf("Enter name of the file: ");
+	name = enter_str();
+	while (getchar() != '\n');
+	re = load(graf, name);
+	return name;
 }

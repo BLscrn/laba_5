@@ -13,10 +13,13 @@
 int main(){ 
 	graf = (Graf*)calloc(1,sizeof(Graf));
 	ret = 0;
+	name = enter_file(&graf);
 	while (ret != 6) {
 		ch = dialog(&x,&y,&name1,&name2,&name0);
 		ret = rasp(ch, x, y, name0,name1, name2,&graf);
 	}
+	//printf("\n\n\n%d    %d", graf->col_vertex, graf->col_edge);
+	save(graf, name);
 	free_graf(graf);
 	//_CrtDumpMemoryLeaks();
 	return 0;
