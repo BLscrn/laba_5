@@ -30,6 +30,7 @@ int rasp(int ch,int x,int y,int name0 ,int name1,int name2,Graf** graf) {
 	}
 	if (ch == 5) {
 		show_graf(*graf);
+		return 0;
 	}
 	if (ch == 6) {
 		return 6;
@@ -50,6 +51,10 @@ int rasp(int ch,int x,int y,int name0 ,int name1,int name2,Graf** graf) {
 		else {
 			return 0;
 		}
+	}
+	if (ch == 9) {
+		int re;
+		re = short_way(*graf, name1, name2);
 	}
 }
 

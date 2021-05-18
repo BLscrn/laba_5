@@ -41,9 +41,9 @@ int getInt(int* a) {
 int dialog(int* x, int* y,int* name1, int* name2,int* name0) {
 	int flag, ch;
 	char* chouse[] = { "1. Enter new vertex", "2. Enter new edge"
-		,"3. dellete vertex","4. dellete edge","5. show graf","6. Exite","7. random generation","8. find in weight" };
+		,"3. dellete vertex","4. dellete edge","5. show graf","6. Exite","7. random generation","8. find in weight","9. find short way"};
 	printf("Choose one of this variants:\n");
-	for (int i = 0; i < 8; i++) {
+	for (int i = 0; i < 9; i++) {
 		printf("%s\n", chouse[i]);
 	}
 	flag = 0;
@@ -54,7 +54,7 @@ int dialog(int* x, int* y,int* name1, int* name2,int* name0) {
 		getInt(&ch);
 		while (getchar() != '\n');
 		flag = 1;
-	} while (ch <= 0 || ch >= 9);
+	} while (ch <= 0 || ch >= 10);
 	if (ch == 1) {
 		printf("Enter name: ");
 		scanf("%d", name0);
@@ -102,7 +102,8 @@ int dialog(int* x, int* y,int* name1, int* name2,int* name0) {
 		scanf("%d", name1);
 		while (getchar() != '\n');
 		return 7;
-	}if (ch == 8) {
+	}
+	if (ch == 8) {
 		printf("Enter name1: ");
 		scanf("%d", name1);
 		while (getchar() != '\n');
@@ -110,6 +111,15 @@ int dialog(int* x, int* y,int* name1, int* name2,int* name0) {
 		scanf("%d", name2);
 		while (getchar() != '\n');
 		return 8;
+	}
+	if (ch == 9) {
+		printf("Enter name1: ");
+		scanf("%d", name1);
+		while (getchar() != '\n');
+		printf("Enter name2: ");
+		scanf("%d", name2);
+		while (getchar() != '\n');
+		return 9;
 	}
 }
 

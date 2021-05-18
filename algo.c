@@ -85,5 +85,76 @@ int find_weight(Graf* graf, int name, int name_to) {
 		}
 		return print_find_weight(end);
 	}
+	free(mas_find);
+}
 
+
+
+int compare_el(float num1, float num2) {
+	if (num1 >= 0 && num2 >= 0) {
+		if (num1 > num2){
+			return 1;
+		}
+		else {
+			return 2;
+		}
+	}
+	else {
+		if (num1 < 0 && num2 < 0) {
+			return 0;
+		}
+		else if (num1 < 0) {
+			return 1;
+		}
+		else if(num2 < 0){
+			return 2;
+		}
+	}
+}
+
+Find_v* go_on_edges(Graf* graf, Find_v* mas, Find_v* begin, int name1, int name2) {
+	Edge* help;
+	float num1;
+	float num2;
+	Find_v* from;
+	Find_v* to;
+	int check;
+
+	for (int i = 0; i < graf->col_vertex; i++) {
+		help = mas[i].uk_vertex->edge;
+		while (help != NULL) {
+			to = find_ve_find_ma(mas, help->to_el->name, graf->col_vertex);
+			from = find_ve_find_ma(mas, help->from_el->name, graf->col_vertex);
+			num1 = to->d;
+			num2 = from->d == -1 ? -1 : from->d + help->weight;
+			check = compare_el(num1, num2);
+			if (check == 1) {
+				to->d = num2;
+				to->pred = from;
+			}
+			help = help->next_edge;
+		}
+	}
+	return mas;
+}
+
+int short_way(Graf* graf, int name1, int name2) {
+	Find_v* mas_find;
+	Find_v* begin;
+	Find_v* end;
+	mas_find = (Find_v*)calloc(graf->col_vertex, sizeof(Find_v));
+	for (int i = 0; i < graf->col_vertex; i++) {
+		mas_find[i].d = -1;
+		mas_find[i].uk_vertex = &(graf->graf_mas[i]);
+	}
+	begin = find_ve_find_ma(mas_find, name1, graf->col_vertex);
+	end = find_ve_find_ma(mas_find, name2, graf->col_vertex);
+	begin->d = 0;
+	for (int i = 0; i < graf->col_vertex - 1; i++) {
+		mas_find = go_on_edges(graf, mas_find, begin, name1, name2);
+	}
+	
+	prt_f_w(end, end);
+	free(mas_find);
+	return 0;
 }
