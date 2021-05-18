@@ -4,6 +4,7 @@
 #include "time.h"
 #include "vertex.h"
 #include "dialog.h"
+#include "algo.h"
 
 char* enter_str() {
 	int q = 1, size = 10;
@@ -40,7 +41,7 @@ int getInt(int* a) {
 int dialog(int* x, int* y,int* name1, int* name2,int* name0) {
 	int flag, ch;
 	char* chouse[] = { "1. Enter new vertex", "2. Enter new edge"
-		,"3. dellete vertex","4. dellete edge","5. show graf","6. Exite","7. random generation","8. Timing" };
+		,"3. dellete vertex","4. dellete edge","5. show graf","6. Exite","7. random generation","8. find in weight" };
 	printf("Choose one of this variants:\n");
 	for (int i = 0; i < 8; i++) {
 		printf("%s\n", chouse[i]);
@@ -102,6 +103,12 @@ int dialog(int* x, int* y,int* name1, int* name2,int* name0) {
 		while (getchar() != '\n');
 		return 7;
 	}if (ch == 8) {
+		printf("Enter name1: ");
+		scanf("%d", name1);
+		while (getchar() != '\n');
+		printf("Enter name2: ");
+		scanf("%d", name2);
+		while (getchar() != '\n');
 		return 8;
 	}
 }
@@ -132,4 +139,41 @@ char* enter_file(Graf** graf) {
 	while (getchar() != '\n');
 	re = load(graf, name);
 	return name;
+}
+
+
+int print_find_weight(Find_v* show_el) {
+	if (show_el->pred != NULL) {
+		printf("Path is:\n");
+		prt_f_w(show_el, show_el);
+		return 0;
+	}
+	else {
+		return 1;
+	}
+}
+
+void prt_f_w(Find_v* show_el,Find_v* end) {
+	if (show_el->pred == NULL) {
+		printf("%d(%d)--->",show_el->uk_vertex->name, show_el->d);
+	}
+	else{
+		prt_f_w(show_el->pred,end);
+		if (show_el != end) {
+			printf("%d(%d)--->",show_el->uk_vertex->name, show_el->d);
+		}
+		else {
+			printf("%d(%d)\n", show_el->uk_vertex->name, show_el->d);
+		}
+	}
+}
+
+void check_ans(int res, Graf* help) {
+	if (res == 404) {
+		printf("There are no such element in graf\n");
+	}
+	else if (res == 504) {
+		printf("There is no way\n");
+	}
+
 }

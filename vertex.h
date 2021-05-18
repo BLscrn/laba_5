@@ -1,6 +1,8 @@
 #ifndef VERTEX_H
 #define VERTEX_H
 
+typedef struct Find_v Find_v;
+
 typedef struct Edge {
 	struct Vertex* from_el;
 	struct Vertex* to_el;

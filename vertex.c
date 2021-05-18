@@ -4,7 +4,7 @@
 #include <math.h>
 #include "dialog.h"
 #include "vertex.h"
-
+#include "algo.h"
 
 
 
@@ -39,7 +39,17 @@ int rasp(int ch,int x,int y,int name0 ,int name1,int name2,Graf** graf) {
 		return 7;
 	}
 	if (ch == 8) {
-		//D_Timing();
+		int re;
+		re = find_weight(*graf, name1, name2);
+		if (re == -1) {
+			return 404;
+		}
+		else if (re == 1) {
+			return 504;
+		}
+		else {
+			return 0;
+		}
 	}
 }
 
