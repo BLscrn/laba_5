@@ -55,6 +55,12 @@ int rasp(int ch,int x,int y,int name0 ,int name1,int name2,Graf** graf) {
 	if (ch == 9) {
 		int re;
 		re = short_way(*graf, name1, name2);
+		if (re == -1) {
+			return 404;
+		}
+		else {
+			return 0;
+		}
 	}
 }
 

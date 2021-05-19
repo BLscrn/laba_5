@@ -149,6 +149,9 @@ int short_way(Graf* graf, int name1, int name2) {
 	}
 	begin = find_ve_find_ma(mas_find, name1, graf->col_vertex);
 	end = find_ve_find_ma(mas_find, name2, graf->col_vertex);
+	if (begin == NULL || end == NULL) {
+		return -1;
+	}
 	begin->d = 0;
 	for (int i = 0; i < graf->col_vertex - 1; i++) {
 		mas_find = go_on_edges(graf, mas_find, begin, name1, name2);
