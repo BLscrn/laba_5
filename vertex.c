@@ -62,6 +62,23 @@ int rasp(int ch,int x,int y,int name0 ,int name1,int name2,Graf** graf) {
 			return 0;
 		}
 	}
+	if (ch == 10) {
+		Find_v* mas;
+		Graf* graf1;
+		Find_v* mas1;
+		mas = max_svaz(*graf);
+		//print_dfs(mas, *graf);
+		graf1 = trnsp_graf(*graf);
+		//show_graf(graf1);
+		mas1 = mas_fill(graf1);
+		//print_dfs(mas1, graf1);
+		mas1 = DFS_mod(graf1, mas, mas1);
+		//mas1 = max_svaz(graf1);
+		//print_dfs(mas1, graf1);
+		free_graf(graf1);
+		free(mas);
+		free(mas1);
+	}
 }
 
 

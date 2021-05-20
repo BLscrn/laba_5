@@ -14,6 +14,9 @@ char* enter_file(Graf** graf);
 int print_find_weight(Find_v* show_el);
 void prt_f_w(Find_v* show_el, Find_v* end);
 void check_ans(int res, Graf* help);
+void print_dfs(Find_v* mas, Graf* graf);
+void DFS_Visit_show(int* time, Graf* graf, Find_v* mas_el, Find_v* mas);
+Find_v* DFS_mod(Graf* graf1, Find_v* mas, Find_v* mas1);
 
 
 #endif

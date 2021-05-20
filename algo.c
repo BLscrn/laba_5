@@ -161,3 +161,89 @@ int short_way(Graf* graf, int name1, int name2) {
 	free(mas_find);
 	return 0;
 }
+
+
+Find_v* DFS(Graf* graf, Find_v* mas) {
+	int time = 0;
+	for (int i = 0; i < graf->col_vertex; i++) {
+		if (mas[i].color == 0) {
+			DFS_Visit(&time, graf, &(mas[i]), mas);
+		}
+	}
+	return mas;
+}
+
+
+Find_v* find_max(Find_v* mas, Graf* graf1,Find_v* mas1) {
+	Find_v* help;
+	int n = 0;
+	help = NULL;
+	for (int i = 0; i < graf1->col_vertex; i++) {
+		if (mas[i].f > n && mas1[i].color == 0) {
+			help = &(mas1[i]);
+			n = mas[i].f;
+		}
+	}
+	return help;
+}
+void DFS_Visit(int* time, Graf* graf, Find_v* mas_el,Find_v* mas) {
+	(mas_el)->color = 1;
+	*time = *time + 1;
+	(mas_el)->d = *time;
+	Edge* help;
+	help = (mas_el)->uk_vertex->edge;
+	Find_v* help_f;
+	while (help != NULL) {
+		help_f = find_ve_find_ma(mas, help->to_el->name, graf->col_vertex);
+		if(help_f->color == 0){
+			help_f->pred = mas_el;
+			DFS_Visit(time, graf, help_f, mas);
+		}
+		help = help->next_edge;
+	}
+	(mas_el)->color = 2;
+	*time = *time + 1;
+	(mas_el)->f = *time;
+
+}
+
+Find_v* max_svaz(Graf* graf) {
+	Find_v* mas;
+	mas = (Find_v*)calloc(graf->col_vertex, sizeof(Find_v));
+	for (int i = 0; i < graf->col_vertex; i++) {
+		mas[i].color = 0;
+		mas[i].pred = NULL;
+		mas[i].uk_vertex = &(graf->graf_mas[i]);
+	}
+	mas = DFS(graf, mas);
+	return mas;
+}
+
+Graf* trnsp_graf(Graf* graf) {
+	Graf* graf1;
+	graf1 = (Graf*)calloc(1, sizeof(Graf));
+	for (int i = 0; i < graf->col_vertex; i++) {
+		add_ver(&graf1, graf->graf_mas[i].x, graf->graf_mas[i].y, graf->graf_mas[i].name);
+	}
+	Edge* help;
+	for (int i = 0; i < graf->col_vertex; i++) {
+		help = graf->graf_mas[i].edge;
+		while (help != NULL) {
+			add_edge(&graf1, help->to_el->name, help->from_el->name);
+			help = help->next_edge;
+		}
+	}
+	return graf1;
+}
+
+
+Find_v* mas_fill(Graf* graf) {
+	Find_v* mas;
+	mas = (Find_v*)calloc(graf->col_vertex, sizeof(Find_v));
+	for (int i = 0; i < graf->col_vertex; i++) {
+		mas[i].color = 0;
+		mas[i].pred = NULL;
+		mas[i].uk_vertex = &(graf->graf_mas[i]);
+	}
+	return mas;
+}

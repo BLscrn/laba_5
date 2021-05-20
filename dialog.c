@@ -41,9 +41,9 @@ int getInt(int* a) {
 int dialog(int* x, int* y,int* name1, int* name2,int* name0) {
 	int flag, ch;
 	char* chouse[] = { "1. Enter new vertex", "2. Enter new edge"
-		,"3. dellete vertex","4. dellete edge","5. show graf","6. Exite","7. random generation","8. find in weight","9. find short way"};
+		,"3. dellete vertex","4. dellete edge","5. show graf","6. Exite","7. random generation","8. find in weight","9. find short way","10. max strong component"};
 	printf("Choose one of this variants:\n");
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < 10; i++) {
 		printf("%s\n", chouse[i]);
 	}
 	flag = 0;
@@ -54,7 +54,7 @@ int dialog(int* x, int* y,int* name1, int* name2,int* name0) {
 		getInt(&ch);
 		while (getchar() != '\n');
 		flag = 1;
-	} while (ch <= 0 || ch >= 10);
+	} while (ch <= 0 || ch >= 11);
 	if (ch == 1) {
 		printf("Enter name: ");
 		scanf("%d", name0);
@@ -121,6 +121,9 @@ int dialog(int* x, int* y,int* name1, int* name2,int* name0) {
 		while (getchar() != '\n');
 		return 9;
 	}
+	if (ch == 10) {
+		return 10;
+	}
 }
 
 void show_graf(Graf* graf) {
@@ -186,4 +189,56 @@ void check_ans(int res, Graf* help) {
 		printf("There is no way\n");
 	}
 
+}
+
+void print_dfs(Find_v* mas,Graf* graf) {
+	Edge* help;
+	printf("\n<==mas==>\n\n");
+	for (int i = 0; i < graf->col_vertex; i++) {
+		printf("name:%d (%d/%d)\n", mas[i].uk_vertex->name, mas[i].d, mas[i].f);
+		printf("Edges:\n");
+		help = mas[i].uk_vertex->edge;
+		while (help != NULL) {
+			printf("%d --->%d\n", help->from_el->name, help->to_el->name);
+			help = help->next_edge;
+		}
+	}
+}
+
+void DFS_Visit_show(int* time, Graf* graf, Find_v* mas_el, Find_v* mas) {
+	(mas_el)->color = 1;
+	*time = *time + 1;
+	(mas_el)->d = *time;
+	Edge* help;
+	help = (mas_el)->uk_vertex->edge;
+	Find_v* help_f;
+	while (help != NULL) {
+		help_f = find_ve_find_ma(mas, help->to_el->name, graf->col_vertex);
+		if (help_f->color == 0) {
+			help_f->pred = mas_el;
+			DFS_Visit_show(time, graf, help_f, mas);
+		}
+		help = help->next_edge;
+	}
+	printf("%d ",mas_el->uk_vertex->name);
+	(mas_el)->color = 2;
+	*time = *time + 1;
+	(mas_el)->f = *time;
+
+}
+
+Find_v* DFS_mod(Graf* graf1, Find_v* mas, Find_v* mas1) {
+	int time = 0;
+	Find_v* help;
+	int i = 0;
+	help = find_max(mas, graf1,mas1);
+	printf("<===show components===>\n\n");
+	while (help != NULL) {
+		i++;
+		printf("%d component: ",i);
+		DFS_Visit_show(&time, graf1, help, mas1);
+		printf("\n");
+		help = find_max(mas, graf1,mas1);
+	}
+	return mas1;
 }
