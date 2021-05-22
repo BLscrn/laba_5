@@ -4,13 +4,17 @@
 #include <math.h>
 #include "dialog.h"
 #include "vertex.h"
+
 /*
 #define __CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #define new DEBUG_NEW
 */
+
+
 int main(){ 
+	//_crtBreakAlloc = 86;
 	graf = (Graf*)calloc(1,sizeof(Graf));
 	ret = 0;
 	name = enter_file(&graf);

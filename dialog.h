@@ -17,6 +17,8 @@ void check_ans(int res, Graf* help);
 void print_dfs(Find_v* mas, Graf* graf);
 void DFS_Visit_show(int* time, Graf* graf, Find_v* mas_el, Find_v* mas);
 Find_v* DFS_mod(Graf* graf1, Find_v* mas, Find_v* mas1);
+int D_Timing_weight();
+int D_Timing_kr();
 
 
 #endif

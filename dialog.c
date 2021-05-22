@@ -41,9 +41,9 @@ int getInt(int* a) {
 int dialog(int* x, int* y,int* name1, int* name2,int* name0) {
 	int flag, ch;
 	char* chouse[] = { "1. Enter new vertex", "2. Enter new edge"
-		,"3. dellete vertex","4. dellete edge","5. show graf","6. Exite","7. random generation","8. find in weight","9. find short way","10. max strong component"};
+		,"3. dellete vertex","4. dellete edge","5. show graf","6. Exite","7. random generation","8. find in weight","9. find short way","10. max strong component","11. timing 1","12. timing 2"};
 	printf("Choose one of this variants:\n");
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 12; i++) {
 		printf("%s\n", chouse[i]);
 	}
 	flag = 0;
@@ -54,7 +54,7 @@ int dialog(int* x, int* y,int* name1, int* name2,int* name0) {
 		getInt(&ch);
 		while (getchar() != '\n');
 		flag = 1;
-	} while (ch <= 0 || ch >= 11);
+	} while (ch <= 0 || ch >= 13);
 	if (ch == 1) {
 		printf("Enter name: ");
 		scanf("%d", name0);
@@ -123,6 +123,12 @@ int dialog(int* x, int* y,int* name1, int* name2,int* name0) {
 	}
 	if (ch == 10) {
 		return 10;
+	}
+	if (ch == 11) {
+		return 11;
+	}
+	if (ch == 12) {
+		return 12;
 	}
 }
 
@@ -241,4 +247,80 @@ Find_v* DFS_mod(Graf* graf1, Find_v* mas, Find_v* mas1) {
 		help = find_max(mas, graf1,mas1);
 	}
 	return mas1;
+}
+
+
+int D_Timing_weight() {
+	Graf* graf;
+	graf = (Graf*)calloc(1, sizeof(Graf));
+	int n = 10, key[1000], k, cnt = 1000, i, m,re;
+	clock_t first, last;
+	srand(time(NULL));
+	char* key_node = (char*)calloc(255, sizeof(char));
+	while (n-- > 0) {
+		graf = NULL;
+		graf = (Graf*)calloc(1, sizeof(Graf));
+		
+		for (i = 0; i < 1000; ++i) {
+			key[i] = rand() * rand();
+		}
+		
+		random(&graf, (11-n)* 1000);
+		m = 0;
+		first = clock();
+		Find_v* mas;
+		for (i = 0; i < 1000; ++i) {
+
+			//itoa(key[i], key_node, 10);
+			mas = NULL;
+			re = find_weight(graf, key[i] % 5000,key[rand()%1000] % 5000, &mas);
+			if (re > -1) {
+				m++;
+			}
+			free(mas);
+		}
+		last = clock();
+		printf("%d items was found\n", m);
+		printf("test #%d, number of nodes = %d, time = %d\n", 10 - n, (10 - n) * cnt, last - first);
+		free_graf(graf);
+	}
+	return 1;
+}
+
+
+int D_Timing_kr() {
+	Graf* graf;
+	graf = (Graf*)calloc(1, sizeof(Graf));
+	int n = 10, key[1000], k, cnt = 1000, i, m, re;
+	clock_t first, last;
+	srand(time(NULL));
+	char* key_node = (char*)calloc(255, sizeof(char));
+	while (n-- > 0) {
+		graf = NULL;
+		graf = (Graf*)calloc(1, sizeof(Graf));
+
+		for (i = 0; i < 1000; ++i) {
+			key[i] = rand() * rand();
+		}
+
+		random(&graf, (11 - n) * 1000);
+		m = 0;
+		first = clock();
+		Find_v* mas;
+		for (i = 0; i < 1000; ++i) {
+
+			//itoa(key[i], key_node, 10);
+			mas = NULL;
+			re = short_way(graf, key[i] % 5000, key[rand() % 1000] % 5000, &mas);
+			if (re > -1) {
+				m++;
+			}
+			free(mas);
+		}
+		last = clock();
+		printf("%d items was found\n", m);
+		printf("test #%d, number of nodes = %d, time = %d\n", 10 - n, (10 - n) * cnt, last - first);
+		free_graf(graf);
+	}
+	return 1;
 }

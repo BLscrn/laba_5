@@ -41,24 +41,35 @@ int rasp(int ch,int x,int y,int name0 ,int name1,int name2,Graf** graf) {
 	}
 	if (ch == 8) {
 		int re;
-		re = find_weight(*graf, name1, name2);
+		Find_v* mas = NULL;
+		re = find_weight(*graf, name1, name2,&mas);
 		if (re == -1) {
 			return 404;
 		}
-		else if (re == 1) {
-			return 504;
-		}
 		else {
+			re = print_find_weight(find_ve_find_ma(mas, name2, (*graf)->col_vertex));
+			if (re == 1) {
+				free(mas);
+				return 504;
+			}
+			else {
+				free(mas);
+				return 0;
+			}
 			return 0;
 		}
 	}
 	if (ch == 9) {
 		int re;
-		re = short_way(*graf, name1, name2);
+		Find_v* mas = NULL;
+		re = short_way(*graf, name1, name2,&mas);
+		
 		if (re == -1) {
 			return 404;
 		}
 		else {
+			prt_f_w(find_ve_find_ma(mas, name2, (*graf)->col_vertex), find_ve_find_ma(mas, name2, (*graf)->col_vertex));
+			free(mas);
 			return 0;
 		}
 	}
@@ -78,6 +89,14 @@ int rasp(int ch,int x,int y,int name0 ,int name1,int name2,Graf** graf) {
 		free_graf(graf1);
 		free(mas);
 		free(mas1);
+	}
+	if (ch == 11) {
+		D_Timing_weight();
+		return 0;
+	}
+	if (ch == 12) {
+		D_Timing_kr();
+		return 0;
 	}
 }
 
@@ -311,16 +330,17 @@ void random(Graf** graf, int kol) {
 	int rand_y;
 	int rand_nm;
 	for (int i = 0; i < kol; i++) {
-		rand_x = rand() % 100;
-		rand_y = rand() % 100;
-		rand_nm = rand() % 100;
+		rand_x = rand() % 5000;
+		rand_y = rand() % 5000;
+		rand_nm = rand()% 5000;
 		add_ver(graf, rand_x, rand_y, rand_nm);
 	}
-	rand_nm = rand() % (kol*kol);
+	//rand_nm = rand() % (kol*(kol-1));
+	rand_nm = 2* kol; // change to get more edges
 	for (int i = 0; i < rand_nm; i++) {
-		rand_x = rand() % 100;
-		rand_y = rand() % 100;
-		add_edge(graf, rand_x, rand_y);
+		rand_x = rand() % ((*graf)->col_vertex);
+		rand_y = rand() % ((*graf)->col_vertex);
+		add_edge(graf, (*graf)->graf_mas[rand_x].name, (*graf)->graf_mas[rand_y].name);
 	}
 }
 

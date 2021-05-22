@@ -22,6 +22,7 @@ Find_v** Q_move(Find_v** Q,int* len_q) {
 		for (int i = 0; i < *len_q; i++) {
 			Q[i] = Q[i + 1];
 		}
+		Q = (Find_v**)realloc(Q, (*len_q) * sizeof(Find_v*));
 		return Q;
 	}
 	else {
@@ -57,7 +58,7 @@ Find_v** Q_add_sm(Find_v** Q, int* len_q, Find_v* Q_el,Find_v* mas,int kol) {
 	return Q;
 }
 
-int find_weight(Graf* graf, int name, int name_to) {
+int find_weight(Graf* graf, int name, int name_to,Find_v** mas) {
 	int len_q = 0;
 	Find_v** Q;
 	Find_v* mas_find;
@@ -83,9 +84,11 @@ int find_weight(Graf* graf, int name, int name_to) {
 		while (Q != NULL) {
 			Q = Q_add_sm(Q, &len_q, Q[0], mas_find,graf->col_vertex);
 		}
-		return print_find_weight(end);
+		*mas = mas_find;
+		return 1;
 	}
-	free(mas_find);
+	
+	//free(mas_find);
 }
 
 
@@ -138,7 +141,7 @@ Find_v* go_on_edges(Graf* graf, Find_v* mas, Find_v* begin, int name1, int name2
 	return mas;
 }
 
-int short_way(Graf* graf, int name1, int name2) {
+int short_way(Graf* graf, int name1, int name2,Find_v** mas) {
 	Find_v* mas_find;
 	Find_v* begin;
 	Find_v* end;
@@ -157,8 +160,9 @@ int short_way(Graf* graf, int name1, int name2) {
 		mas_find = go_on_edges(graf, mas_find, begin, name1, name2);
 	}
 	
-	prt_f_w(end, end);
-	free(mas_find);
+	//prt_f_w(end, end);
+	//free(mas_find);
+	*mas = mas_find;
 	return 0;
 }
 
