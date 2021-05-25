@@ -98,6 +98,9 @@ int rasp(int ch,int x,int y,int name0 ,int name1,int name2,Graf** graf) {
 		D_Timing_kr();
 		return 0;
 	}
+	if (ch == 13) {
+		dop1_f(*graf);
+	}
 }
 
 
@@ -344,3 +347,35 @@ void random(Graf** graf, int kol) {
 	}
 }
 
+void dop1_f(Graf* graf) {
+	FILE* f;
+	f = fopen("tree.txt", "w+b");
+	fprintf(f, "digraph G{ \n");
+	dop1_write(graf, f);
+	fprintf(f, "\n}\n");
+	fclose(f);
+}
+
+
+void dop1_write(Graf* graf, FILE* f) {
+	Edge* help;
+	for (int i = 0; i < graf->col_vertex; i++) {
+		help = graf->graf_mas[i].edge;
+		if (help == NULL) {
+			fprintf(f, "%d", graf->graf_mas[i].name);
+		}
+		else {
+			fprintf(f, "%d->", graf->graf_mas[i].name);
+		}
+		while (help != NULL) {
+			if (help == graf->graf_mas[i].edge) {
+				fprintf(f, "%d", help->to_el->name);
+			}
+			else {
+				fprintf(f, ",%d", help->to_el->name);
+			}
+			help = help->next_edge;
+		}
+		fprintf(f, "\n");
+	}
+}
