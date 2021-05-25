@@ -101,6 +101,10 @@ int rasp(int ch,int x,int y,int name0 ,int name1,int name2,Graf** graf) {
 	if (ch == 13) {
 		dop1_f(*graf);
 	}
+	if (ch == 14) {
+		free_graf(*graf);
+		*graf = load_city();
+	}
 }
 
 
@@ -378,4 +382,62 @@ void dop1_write(Graf* graf, FILE* f) {
 		}
 		fprintf(f, "\n");
 	}
+}
+
+Graf* load_city() {
+	Graf* graf;
+	graf = (Graf*)calloc(1, sizeof(Graf));
+	FILE* f;
+	f = fopen("OL.cnode.txt", "r+b");
+	int name, x, y;
+	int er = 0;
+	char* inf = NULL;
+	inf = (char*)calloc(256, sizeof(char));
+	int flag = 0; 
+	while (flag == 0) {
+		for (int i = 0; i < 3; i++) {
+			er = fscanf(f, "%s", inf);
+			if (er == -1) {
+				flag = 1;
+				break;
+			}
+			if (i == 0) {
+				name = atoi(inf);
+			}
+			else if (i == 1) {
+				x = atoi(inf);
+			}
+			else if (i == 2) {
+				y = atoi(inf);
+			}
+		}
+		if (flag != 1) {
+			add_ver(&graf, x, y, name);
+		}
+	}
+	fclose(f);
+	f = fopen("OL.cedge.txt", "r+b");
+	flag = 0;
+	while (flag == 0) {
+		for (int i = 0; i < 4; i++) {
+			er = fscanf(f, "%s", inf);
+			if (er == -1) {
+				flag = 1;
+				break;
+			}
+			else if (i == 1) {
+				x = atoi(inf);
+			}
+			else if (i == 2) {
+				y = atoi(inf);
+			}
+		}
+		if (flag != 1) {
+			add_edge(&graf, x, y);
+			add_edge(&graf, y, x);
+		}
+	}
+	fclose(f);
+	free(inf);
+	return graf;
 }

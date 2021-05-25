@@ -41,9 +41,9 @@ int getInt(int* a) {
 int dialog(int* x, int* y,int* name1, int* name2,int* name0) {
 	int flag, ch;
 	char* chouse[] = { "1. Enter new vertex", "2. Enter new edge"
-		,"3. dellete vertex","4. dellete edge","5. show graf","6. Exite","7. random generation","8. find in weight","9. find short way","10. max strong component","11. timing 1","12. timing 2","13. save graf"};
+		,"3. dellete vertex","4. dellete edge","5. show graf","6. Exite","7. random generation","8. find in weight","9. find short way","10. max strong component","11. timing 1","12. timing 2","13. save graf","14. dop2"};
 	printf("Choose one of this variants:\n");
-	for (int i = 0; i < 13; i++) {
+	for (int i = 0; i < 14; i++) {
 		printf("%s\n", chouse[i]);
 	}
 	flag = 0;
@@ -54,7 +54,7 @@ int dialog(int* x, int* y,int* name1, int* name2,int* name0) {
 		getInt(&ch);
 		while (getchar() != '\n');
 		flag = 1;
-	} while (ch <= 0 || ch >= 14);
+	} while (ch <= 0 || ch >= 15);
 	if (ch == 1) {
 		printf("Enter name: ");
 		scanf("%d", name0);
@@ -132,6 +132,9 @@ int dialog(int* x, int* y,int* name1, int* name2,int* name0) {
 	}
 	if (ch == 13) {
 		return 13;
+	}
+	if (ch == 14) {
+		return 14;
 	}
 }
 

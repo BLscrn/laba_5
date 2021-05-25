@@ -158,6 +158,7 @@ int short_way(Graf* graf, int name1, int name2,Find_v** mas) {
 	begin->d = 0;
 	for (int i = 0; i < graf->col_vertex - 1; i++) {
 		mas_find = go_on_edges(graf, mas_find, begin, name1, name2);
+		printf("\n%d", i);
 	}
 	
 	//prt_f_w(end, end);

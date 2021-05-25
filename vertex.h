@@ -44,6 +44,7 @@ void save(Graf* graf, char* name);
 void random(Graf** graf, int kol);
 void dop1_f(Graf* graf);
 void dop1_write(Graf* graf, FILE* f);
+Graf* load_city();
 
 #endif
 
